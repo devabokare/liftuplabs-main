@@ -21,6 +21,10 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     })
 
     lenisRef.current = lenis
+    
+    // Expose to window for external control (like locking scroll on modals)
+    // @ts-expect-error - Adding lenis to window
+    window.lenis = lenis
 
     // Connect Lenis to GSAP ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update)

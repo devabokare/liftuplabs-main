@@ -111,11 +111,17 @@ export function AboutSection() {
   useEffect(() => {
     if (selectedMember) {
       document.body.style.overflow = "hidden"
+      // @ts-expect-error - lenis exposed to window
+      if (typeof window !== "undefined" && window.lenis) window.lenis.stop()
     } else {
       document.body.style.overflow = ""
+      // @ts-expect-error - lenis exposed to window
+      if (typeof window !== "undefined" && window.lenis) window.lenis.start()
     }
     return () => {
       document.body.style.overflow = ""
+      // @ts-expect-error - lenis exposed to window
+      if (typeof window !== "undefined" && window.lenis) window.lenis.start()
     }
   }, [selectedMember])
 
