@@ -144,10 +144,7 @@
 [id^="vercel-"],
 [class*="vercel-"],
 [data-vercel-edit-info],
-[class*="nextjs-"],
-nextjs-portal,
-#__next-build-watcher,
-#nextjs-dev-tools {
+[class*="nextjs-"] {
   display: none !important;
   visibility: hidden !important;
   pointer-events: none !important;

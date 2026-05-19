@@ -6,10 +6,10 @@ export function Footer() {
       <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex flex-col items-center md:items-start gap-2 text-center md:text-left">
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-            © 2026 LIFTUPLABS. All rights reserved.
+            © 2026 LiftUpLabs. All rights reserved.
           </p>
           <p className="font-mono text-[10px] text-accent/80 uppercase tracking-widest">
-            Design and develop by :- LIFTUPLABS
+            Built with ❤️ by LiftUpLabs.
           </p>
         </div>
         <div className="flex items-center gap-6">

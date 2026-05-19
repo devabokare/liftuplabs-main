@@ -158,15 +158,9 @@ export function ColophonSection() {
         className="mt-24 pt-8 border-t border-border/20 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-          © 2026 LIFTUPLABS. All rights reserved.
+          © 2025 LiftUpLabs. All rights reserved.
         </p>
-        <div className="flex items-center gap-6">
-          <a href="#" className="font-mono text-[10px] text-muted-foreground hover:text-accent transition-colors uppercase tracking-widest">Privacy Policy</a>
-          <a href="#" className="font-mono text-[10px] text-muted-foreground hover:text-accent transition-colors uppercase tracking-widest">Terms of Service</a>
-        </div>
-        <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-          Design and develop by :- <span className="text-accent">@LIFTUPLABS</span>
-        </p>
+        <p className="font-mono text-[10px] text-muted-foreground">Designed with intention. Built with precision.</p>
       </div>
     </section>
   )
