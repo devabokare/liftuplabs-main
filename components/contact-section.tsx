@@ -94,34 +94,71 @@ export function ContactSection() {
         <div className="lg:col-span-7 space-y-12">
           <div className="bg-card/30 backdrop-blur-sm border border-border/30 p-8 md:p-12 relative overflow-hidden group/form">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover/form:opacity-100 transition-opacity duration-700 pointer-events-none" />
-            <form ref={formRef} className="relative z-10 space-y-10" onSubmit={(e) => {
+            <form ref={formRef} className="relative z-10 space-y-10" onSubmit={async (e) => {
               e.preventDefault();
               const form = e.currentTarget;
               const nameInput = form.querySelector('input[type="text"]') as HTMLInputElement;
               const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
               const messageInput = form.querySelector('textarea') as HTMLTextAreaElement;
+              const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
               
               const name = nameInput?.value || "";
               const email = emailInput?.value || "";
               const message = messageInput?.value || "";
               
-              const subject = encodeURIComponent(`Inquiry from ${name}`);
-              const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-              
-              const bcc = encodeURIComponent("hariom@liftuplabs.in, deva@liftuplabs.in");
-              const mailtoUrl = `mailto:info@liftuplabs.in?bcc=${bcc}&subject=${subject}&body=${body}`;
-              
-              // Create an anchor and click it for better browser compatibility
-              const link = document.createElement('a');
-              link.href = mailtoUrl;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-              
-              toast({
-                title: "Message Initiated",
-                description: "If your email app didn't open, please ensure you have a default mail client set up.",
-              });
+              // Prevent multiple submissions
+              if (submitBtn) {
+                submitBtn.disabled = true;
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="relative z-10 flex items-center gap-3">Sending...</span>';
+              }
+
+              try {
+                // To make this work, get a free access key from https://web3forms.com/
+                // Replace "YOUR_ACCESS_KEY_HERE" with your actual key.
+                const response = await fetch("https://api.web3forms.com/submit", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                  },
+                  body: JSON.stringify({
+                    access_key: "YOUR_ACCESS_KEY_HERE", 
+                    name: name,
+                    email: email,
+                    message: message,
+                    subject: "New Business Inquiry from LiftUpLabs Website",
+                    from_name: "LiftUpLabs Contact Form"
+                  }),
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                  toast({
+                    title: "Message Sent Successfully!",
+                    description: "Thank you for reaching out. We will get back to you soon.",
+                  });
+                  form.reset();
+                } else {
+                  // If they haven't put a real API key yet, catch it here
+                  toast({
+                    title: "Setup Required",
+                    description: "The email service needs an Access Key. Check the code comments.",
+                  });
+                }
+              } catch (error) {
+                toast({
+                  title: "Connection Error",
+                  description: "Could not send the message. Please try again later.",
+                });
+              } finally {
+                // Restore button
+                if (submitBtn) {
+                  submitBtn.disabled = false;
+                  submitBtn.innerHTML = '<span class="relative z-10 flex items-center gap-3 group-hover:text-foreground transition-colors duration-500">Send Inquiry <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send opacity-70"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span><div class="relative z-10 w-8 h-8 rounded-full border border-background/20 group-hover:border-foreground/20 flex items-center justify-center group-hover:bg-foreground group-hover:text-background transition-all duration-500"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right group-hover:-rotate-45 text-background group-hover:text-background transition-transform duration-500"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div><div class="absolute inset-0 bg-accent translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"></div>';
+                }
+              }
             }}>
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
