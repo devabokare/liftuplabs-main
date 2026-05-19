@@ -22,7 +22,7 @@ export default function SolutionsPage() {
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 md:px-12 mt-12 mb-20 md:mb-32 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
         <div className="flex items-center gap-4 mb-6">
           <span className="w-8 h-[1px] bg-accent inline-block animate-in slide-in-from-left duration-1000 delay-300 fill-mode-both"></span>
-          <span className="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-accent font-medium">02 / Solutions</span>
+          <span className="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-accent font-medium">Capabilities Overview</span>
         </div>
         <h1 className="font-[var(--font-display)] text-5xl md:text-7xl lg:text-[8rem] tracking-tighter uppercase leading-[0.85] text-foreground mb-8">
           Enterprise <br />
