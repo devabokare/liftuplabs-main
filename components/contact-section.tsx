@@ -97,18 +97,30 @@ export function ContactSection() {
             <form ref={formRef} className="relative z-10 space-y-10" onSubmit={(e) => {
               e.preventDefault();
               const form = e.currentTarget;
-              const name = (form.elements[0] as HTMLInputElement).value;
-              const email = (form.elements[1] as HTMLInputElement).value;
-              const message = (form.elements[2] as HTMLTextAreaElement).value;
+              const nameInput = form.querySelector('input[type="text"]') as HTMLInputElement;
+              const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+              const messageInput = form.querySelector('textarea') as HTMLTextAreaElement;
+              
+              const name = nameInput?.value || "";
+              const email = emailInput?.value || "";
+              const message = messageInput?.value || "";
               
               const subject = encodeURIComponent(`Inquiry from ${name}`);
               const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
               
               const bcc = encodeURIComponent("hariom@liftuplabs.in, deva@liftuplabs.in");
-              window.location.href = `mailto:info@liftuplabs.in?bcc=${bcc}&subject=${subject}&body=${body}`;
+              const mailtoUrl = `mailto:info@liftuplabs.in?bcc=${bcc}&subject=${subject}&body=${body}`;
+              
+              // Create an anchor and click it for better browser compatibility
+              const link = document.createElement('a');
+              link.href = mailtoUrl;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              
               toast({
                 title: "Message Initiated",
-                description: "Your email client should now open to complete sending the email.",
+                description: "If your email app didn't open, please ensure you have a default mail client set up.",
               });
             }}>
               <div className="form-element space-y-4 group">
