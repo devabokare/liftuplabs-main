@@ -102,7 +102,8 @@ export function ContactSection() {
               const subject = encodeURIComponent(`Inquiry from ${name}`);
               const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
               
-              window.location.href = `mailto:info@liftuplabs.in?subject=${subject}&body=${body}`;
+              const bcc = encodeURIComponent("hariom@liftuplabs.in, deva@liftuplabs.in");
+              window.location.href = `mailto:info@liftuplabs.in?bcc=${bcc}&subject=${subject}&body=${body}`;
             }}>
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
