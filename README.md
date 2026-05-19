@@ -88,4 +88,4 @@ Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
    Open your browser and navigate to `http://localhost:3000` to see the application running.
 
 ---
-*Built with ❤️ by LiftUpLabs Engineering.*
+*Built with ❤️ by LiftUpLabs.*
