@@ -92,7 +92,18 @@ export function ContactSection() {
         <div className="lg:col-span-7 space-y-12">
           <div className="bg-card/30 backdrop-blur-sm border border-border/30 p-8 md:p-12 relative overflow-hidden group/form">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover/form:opacity-100 transition-opacity duration-700 pointer-events-none" />
-            <form ref={formRef} className="relative z-10 space-y-10" onSubmit={(e) => e.preventDefault()}>
+            <form ref={formRef} className="relative z-10 space-y-10" onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              const name = (form.elements[0] as HTMLInputElement).value;
+              const email = (form.elements[1] as HTMLInputElement).value;
+              const message = (form.elements[2] as HTMLTextAreaElement).value;
+              
+              const subject = encodeURIComponent(`Inquiry from ${name}`);
+              const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+              
+              window.location.href = `mailto:info@liftuplabs.com?subject=${subject}&body=${body}`;
+            }}>
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
                   <span className="text-accent/50">01</span> Your Name
