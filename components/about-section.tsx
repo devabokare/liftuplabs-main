@@ -109,6 +109,17 @@ export function AboutSection() {
   const [selectedMember, setSelectedMember] = useState<typeof TEAM_MEMBERS[0] | null>(null)
 
   useEffect(() => {
+    if (selectedMember) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [selectedMember])
+
+  useEffect(() => {
     if (!sectionRef.current || !headerRef.current) return
 
     const ctx = gsap.context(() => {
@@ -482,11 +493,16 @@ export function AboutSection() {
         </div>
       </div>
 
-      {/* Team Member Detail Modal */}
       {selectedMember && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4 md:p-6 opacity-100 transition-opacity">
+        <div 
+          className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-start md:items-center justify-center p-4 md:p-6 opacity-100 transition-opacity overflow-y-auto"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedMember(null)
+          }}
+          data-lenis-prevent="true"
+        >
           <div
-            className="bg-card text-card-foreground border border-border shadow-2xl rounded-2xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden relative animate-in fade-in zoom-in-95 duration-300"
+            className="bg-card text-card-foreground border border-border shadow-2xl rounded-2xl max-w-4xl w-full flex flex-col md:flex-row overflow-hidden relative animate-in fade-in zoom-in-95 duration-300 my-8 md:my-auto shrink-0"
           >
             <button
               onClick={() => setSelectedMember(null)}
