@@ -4,10 +4,12 @@ import { useRef, useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Mail, Phone, MapPin, ArrowRight, Instagram, Linkedin, Send } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
 
 gsap.registerPlugin(ScrollTrigger)
 
 export function ContactSection() {
+  const { toast } = useToast()
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -104,6 +106,10 @@ export function ContactSection() {
               
               const bcc = encodeURIComponent("hariom@liftuplabs.in, deva@liftuplabs.in");
               window.location.href = `mailto:info@liftuplabs.in?bcc=${bcc}&subject=${subject}&body=${body}`;
+              toast({
+                title: "Message Initiated",
+                description: "Your email client should now open to complete sending the email.",
+              });
             }}>
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
