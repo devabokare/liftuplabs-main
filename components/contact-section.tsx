@@ -102,7 +102,7 @@ export function ContactSection() {
               const subject = encodeURIComponent(`Inquiry from ${name}`);
               const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
               
-              window.location.href = `mailto:info@liftuplabs.com?subject=${subject}&body=${body}`;
+              window.location.href = `mailto:info@liftuplabs.in?subject=${subject}&body=${body}`;
             }}>
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
@@ -186,8 +186,8 @@ export function ContactSection() {
                 <h4 className="font-mono text-[10px] uppercase tracking-[0.3em]">Contact Details</h4>
               </div>
               <div className="space-y-2">
-                <a href="mailto:info@liftuplabs.com" className="block font-mono text-xs md:text-sm text-foreground/80 hover:text-accent transition-colors uppercase">
-                  info@liftuplabs.com
+                <a href="mailto:info@liftuplabs.in" className="block font-mono text-xs md:text-sm text-foreground/80 hover:text-accent transition-colors uppercase">
+                  info@liftuplabs.in
                 </a>
                 <a href="tel:+917588421856" className="block font-mono text-xs md:text-sm text-foreground/80 hover:text-accent transition-colors uppercase">
                   +91 7588421856
