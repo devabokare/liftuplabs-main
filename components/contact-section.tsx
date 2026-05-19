@@ -14,7 +14,7 @@ export function ContactSection() {
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
-  
+
   useEffect(() => {
     if (!sectionRef.current) return
 
@@ -47,7 +47,7 @@ export function ContactSection() {
           },
         })
       }
-      
+
       if (formRef.current) {
         const inputs = formRef.current.querySelectorAll('.form-element')
         gsap.from(inputs, {
@@ -101,11 +101,11 @@ export function ContactSection() {
               const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
               const messageInput = form.querySelector('textarea') as HTMLTextAreaElement;
               const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-              
+
               const name = nameInput?.value || "";
               const email = emailInput?.value || "";
               const message = messageInput?.value || "";
-              
+
               // Prevent multiple submissions
               if (submitBtn) {
                 submitBtn.disabled = true;
@@ -123,17 +123,18 @@ export function ContactSection() {
                     Accept: "application/json",
                   },
                   body: JSON.stringify({
-                    access_key: "YOUR_ACCESS_KEY_HERE", 
+                    access_key: "5f4eca53-e0e3-4c6e-9b7b-4baa342cfb38",
                     name: name,
                     email: email,
                     message: message,
                     subject: "New Business Inquiry from LiftUpLabs Website",
-                    from_name: "LiftUpLabs Contact Form"
+                    from_name: "LiftUpLabs Contact Form",
+                    cc: "hariom@liftuplabs.in, deva@liftuplabs.in"
                   }),
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
                   toast({
                     title: "Message Sent Successfully!",
@@ -174,7 +175,7 @@ export function ContactSection() {
                   <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-accent transition-all duration-500 peer-focus:w-full" />
                 </div>
               </div>
-              
+
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
                   <span className="text-accent/50">02</span> Your Email
@@ -189,7 +190,7 @@ export function ContactSection() {
                   <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-accent transition-all duration-500 peer-focus:w-full" />
                 </div>
               </div>
-              
+
               <div className="form-element space-y-4 group">
                 <label className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground group-focus-within:text-accent transition-colors flex items-center gap-2">
                   <span className="text-accent/50">03</span> Message
@@ -204,7 +205,7 @@ export function ContactSection() {
                   <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-accent transition-all duration-500 peer-focus:w-full" />
                 </div>
               </div>
-              
+
               <div className="form-element pt-4">
                 <button type="submit" className="group relative overflow-hidden flex items-center justify-between w-full sm:w-auto gap-8 bg-foreground text-background px-8 py-5 font-mono text-xs uppercase tracking-[0.2em] transition-all duration-500">
                   <span className="relative z-10 flex items-center gap-3 group-hover:text-foreground transition-colors duration-500">
@@ -235,7 +236,7 @@ export function ContactSection() {
                 Pune, Maharashtra 412307
               </p>
             </div>
-            
+
             <div className="space-y-5 p-6 border border-border/20 bg-secondary/10 hover:bg-secondary/20 transition-colors duration-500 group/item">
               <div className="flex items-center gap-3 text-accent/70 group-hover/item:text-accent transition-colors">
                 <Mail size={18} />
@@ -261,20 +262,20 @@ export function ContactSection() {
           >
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent z-10" />
             <div className="absolute inset-0 bg-accent/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
-            
+
             <div className="relative aspect-[4/3] md:aspect-[16/9] lg:aspect-square overflow-hidden border border-border/30">
               <img
                 src="/lab_map_abstract.png"
                 alt="Lab Location Map"
                 className="w-full h-full object-cover grayscale opacity-70 group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)]"
               />
-              
+
               {/* Radar ping effect */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 z-20">
                 <span className="absolute inset-0 bg-accent rounded-full animate-ping opacity-60 duration-1000" />
                 <span className="relative block w-3 h-3 bg-accent rounded-full border border-background shadow-[0_0_15px_rgba(var(--color-accent),0.8)]" />
               </div>
-              
+
               {/* Corner accents */}
               <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-accent/50 z-20 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
               <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-accent/50 z-20 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
