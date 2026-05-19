@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Mail, Phone, MapPin, ArrowRight, Instagram, Linkedin, Send } from "lucide-react"
@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function ContactSection() {
   const { toast } = useToast()
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -92,8 +93,28 @@ export function ContactSection() {
       <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 relative z-10">
         {/* Contact Form */}
         <div className="lg:col-span-7 space-y-12">
-          <div className="bg-card/30 backdrop-blur-sm border border-border/30 p-8 md:p-12 relative overflow-hidden group/form">
+          <div className="bg-card/30 backdrop-blur-sm border border-border/30 p-8 md:p-12 relative overflow-hidden group/form min-h-[550px] flex flex-col justify-center">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover/form:opacity-100 transition-opacity duration-700 pointer-events-none" />
+            
+            {isSubmitted ? (
+              <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-6 animate-in fade-in zoom-in duration-700">
+                <div className="w-20 h-20 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center mb-2">
+                  <Send className="w-8 h-8 text-accent -ml-1 mt-1" />
+                </div>
+                <h3 className="font-[var(--font-display)] text-4xl md:text-5xl uppercase tracking-wider text-foreground">
+                  Thank You
+                </h3>
+                <p className="font-mono text-xs md:text-sm text-muted-foreground max-w-sm leading-relaxed uppercase tracking-widest">
+                  Your inquiry has been received. Our team will get back to you shortly.
+                </p>
+                <button 
+                  onClick={() => setIsSubmitted(false)}
+                  className="mt-8 text-[10px] font-mono uppercase tracking-[0.2em] text-accent hover:text-foreground transition-colors border-b border-accent/30 hover:border-foreground pb-1"
+                >
+                  Send Another Message
+                </button>
+              </div>
+            ) : (
             <form ref={formRef} className="relative z-10 space-y-10" onSubmit={async (e) => {
               e.preventDefault();
               const form = e.currentTarget;
@@ -123,7 +144,7 @@ export function ContactSection() {
                     Accept: "application/json",
                   },
                   body: JSON.stringify({
-                    access_key: "5f4eca53-e0e3-4c6e-9b7b-4baa342cfb38",
+                    access_key: "5f6ef9cd-a97d-47a3-a429-b6156d5f6879",
                     name: name,
                     email: email,
                     message: message,
@@ -140,6 +161,7 @@ export function ContactSection() {
                     title: "Message Sent Successfully!",
                     description: "Thank you for reaching out. We will get back to you soon.",
                   });
+                  setIsSubmitted(true);
                   form.reset();
                 } else {
                   // If they haven't put a real API key yet, catch it here
@@ -219,6 +241,7 @@ export function ContactSection() {
                 </button>
               </div>
             </form>
+            )}
           </div>
         </div>
 
