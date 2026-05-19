@@ -27,6 +27,7 @@ export const metadata: Metadata = {
 
 import { SideNav } from "@/components/side-nav"
 import { CustomCursor } from "@/components/custom-cursor"
+import { Footer } from "@/components/footer"
 
 export default function RootLayout({
   children,
@@ -43,7 +44,10 @@ export default function RootLayout({
         <CustomCursor />
         <SideNav />
         <main className="relative z-10 min-h-screen">
-          <SmoothScroll>{children}</SmoothScroll>
+          <SmoothScroll>
+            {children}
+            <Footer />
+          </SmoothScroll>
         </main>
       </body>
     </html>
