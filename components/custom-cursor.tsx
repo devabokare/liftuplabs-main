@@ -16,9 +16,10 @@ export function CustomCursor() {
     
     setIsVisible(true)
 
-    // Hide default cursor
-    document.documentElement.style.cursor = "none"
-    document.body.style.cursor = "none"
+    // Hide default cursor globally
+    const styleEl = document.createElement("style")
+    styleEl.innerHTML = `* { cursor: none !important; }`
+    document.head.appendChild(styleEl)
 
     const onMouseMove = (e: MouseEvent) => {
       if (cursorRef.current) {
@@ -31,50 +32,43 @@ export function CustomCursor() {
       }
     }
 
-    const addHoverEvents = () => {
-      const interactables = document.querySelectorAll('a, button, input, textarea, select, [role="button"]')
-      interactables.forEach((el) => {
-        ;(el as HTMLElement).style.cursor = "none"
-        el.addEventListener("mouseenter", onMouseEnterInteractable)
-        el.addEventListener("mouseleave", onMouseLeaveInteractable)
-      })
-    }
-    
-    const onMouseEnterInteractable = () => {
-      if (cursorRef.current) {
-        gsap.to(cursorRef.current, {
-          scale: 1.5,
-          color: "var(--color-accent)",
-          duration: 0.3
-        })
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.closest('a, button, input, textarea, select, [role="button"]')) {
+        if (cursorRef.current) {
+          gsap.to(cursorRef.current, {
+            scale: 1.5,
+            color: "var(--color-accent)",
+            duration: 0.3
+          })
+        }
       }
     }
-    
-    const onMouseLeaveInteractable = () => {
-      if (cursorRef.current) {
-        gsap.to(cursorRef.current, {
-          scale: 1,
-          color: "currentColor",
-          duration: 0.3
-        })
+
+    const onMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.closest('a, button, input, textarea, select, [role="button"]')) {
+        if (cursorRef.current) {
+          gsap.to(cursorRef.current, {
+            scale: 1,
+            color: "currentColor",
+            duration: 0.3
+          })
+        }
       }
     }
 
     window.addEventListener("mousemove", onMouseMove)
-    
-    // Add hover events after a short delay to allow DOM to render
-    setTimeout(addHoverEvents, 1000)
+    document.addEventListener("mouseover", onMouseOver)
+    document.addEventListener("mouseout", onMouseOut)
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove)
-      document.documentElement.style.cursor = "auto"
-      document.body.style.cursor = "auto"
-      const interactables = document.querySelectorAll('a, button, input, textarea, select, [role="button"]')
-      interactables.forEach((el) => {
-        ;(el as HTMLElement).style.cursor = "auto"
-        el.removeEventListener("mouseenter", onMouseEnterInteractable)
-        el.removeEventListener("mouseleave", onMouseLeaveInteractable)
-      })
+      document.removeEventListener("mouseover", onMouseOver)
+      document.removeEventListener("mouseout", onMouseOut)
+      if (document.head.contains(styleEl)) {
+        document.head.removeChild(styleEl)
+      }
     }
   }, [])
 
