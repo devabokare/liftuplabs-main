@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { ScrambleTextOnHover } from "@/components/scramble-text"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -236,10 +237,18 @@ export function AboutSection() {
       </div>
 
       <div className="mt-20 animate-block">
-        <h3 className="font-[var(--font-bebas)] text-4xl md:text-5xl tracking-tight mb-12">CORE DOMAINS OF EXPERTISE</h3>
+        <ScrambleTextOnHover 
+          as="h3" 
+          text="CORE DOMAINS OF EXPERTISE" 
+          className="font-[var(--font-bebas)] text-4xl md:text-5xl tracking-tight mb-12 cursor-default" 
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
-            <h4 className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest">ERP Solutions</h4>
+            <ScrambleTextOnHover 
+              as="h4" 
+              text="ERP Solutions" 
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Odoo ERP implementation & customization</li>
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Tally Solutions integration</li>
@@ -248,7 +257,11 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest">Cloud Solutions</h4>
+            <ScrambleTextOnHover 
+              as="h4" 
+              text="Cloud Solutions" 
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Cloud-native applications</li>
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Infrastructure architecture</li>
@@ -257,7 +270,11 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest">Education Technology (EdTech)</h4>
+            <ScrambleTextOnHover 
+              as="h4" 
+              text="Education Technology (EdTech)" 
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Educational ERP Systems</li>
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Academic Management</li>
@@ -267,7 +284,11 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest">Research & Development (R&D)</h4>
+            <ScrambleTextOnHover 
+              as="h4" 
+              text="Research & Development (R&D)" 
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Custom software research</li>
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Prototype development</li>
@@ -276,7 +297,11 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest">Product Engineering</h4>
+            <ScrambleTextOnHover 
+              as="h4" 
+              text="Product Engineering" 
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> End-to-end product development</li>
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> SaaS architecture</li>
@@ -285,7 +310,11 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <h4 className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest">Workflow Automation</h4>
+            <ScrambleTextOnHover 
+              as="h4" 
+              text="Workflow Automation" 
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Administrative process automation</li>
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Business workflows</li>
@@ -298,7 +327,11 @@ export function AboutSection() {
 
       <div className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-12 border-t border-border/20 pt-16 animate-block">
         <div>
-          <h3 className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8">SPECIALIZED SERVICES</h3>
+          <ScrambleTextOnHover 
+            as="h3" 
+            text="SPECIALIZED SERVICES" 
+            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default" 
+          />
           <ul className="space-y-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Custom Software Development</li>
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Platform Architecture</li>
@@ -309,7 +342,11 @@ export function AboutSection() {
           </ul>
         </div>
         <div>
-          <h3 className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8">INDUSTRY FOCUS</h3>
+          <ScrambleTextOnHover 
+            as="h3" 
+            text="INDUSTRY FOCUS" 
+            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default" 
+          />
           <ul className="space-y-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Schools and Colleges</li>
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Universities</li>
@@ -319,7 +356,11 @@ export function AboutSection() {
           </ul>
         </div>
         <div>
-          <h3 className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8">TECHNOLOGY STRENGTHS</h3>
+          <ScrambleTextOnHover 
+            as="h3" 
+            text="TECHNOLOGY STRENGTHS" 
+            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default" 
+          />
           <ul className="space-y-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> SaaS Development</li>
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Cloud Infrastructure</li>
@@ -331,7 +372,11 @@ export function AboutSection() {
       </div>
 
       <div className="mt-32">
-        <h2 className="font-[var(--font-bebas)] text-4xl md:text-6xl tracking-tight mb-12 animate-block">THE TEAM</h2>
+        <ScrambleTextOnHover 
+          as="h2" 
+          text="THE TEAM" 
+          className="font-[var(--font-bebas)] text-4xl md:text-6xl tracking-tight mb-12 animate-block cursor-default" 
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 team-grid">
           {TEAM_MEMBERS.map((member, i) => (
             <button
@@ -362,7 +407,11 @@ export function AboutSection() {
       </div>
 
       <div className="mt-24">
-        <h2 className="font-[var(--font-bebas)] text-4xl md:text-6xl tracking-tight mb-12 animate-block">ADVISORY BOARD</h2>
+        <ScrambleTextOnHover 
+          as="h2" 
+          text="ADVISORY BOARD" 
+          className="font-[var(--font-bebas)] text-4xl md:text-6xl tracking-tight mb-12 animate-block cursor-default" 
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-12 advisory-grid">
           {ADVISORY_BOARD.map((member, i) => (
             <button
