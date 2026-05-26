@@ -73,7 +73,7 @@ export function ContactSection() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative py-32 px-6 md:px-12 max-w-[1400px] mx-auto w-full"
+      className="relative pt-16 pb-32 px-6 md:px-12 max-w-[1400px] mx-auto w-full"
     >
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-b from-accent/5 to-transparent pointer-events-none opacity-50 blur-[100px]" />

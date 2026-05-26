@@ -237,7 +237,7 @@ export function AboutSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="about" className="relative pt-6 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
+    <section ref={sectionRef} id="about" className="relative pt-6 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
       <div ref={headerRef} className="mb-24">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">05 / About</span>
         <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight uppercase">OUR MISSION</h2>

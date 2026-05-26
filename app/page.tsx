@@ -82,7 +82,7 @@ export default function Page() {
       </section>
 
       {/* 4. About Section */}
-      <section id="about-container" className="relative pt-0 pb-12 overflow-hidden">
+      <section id="about-container" className="relative pt-0 pb-0 overflow-hidden">
         {/* Background Image & Overlays */}
         <div className="absolute inset-0 z-[-1] pointer-events-none">
           <div className="absolute inset-0 bg-background/80 mix-blend-multiply z-10" />
@@ -103,7 +103,7 @@ export default function Page() {
       </section>
 
       {/* 5. Contact Section */}
-      <section id="contact-container" className="relative pt-24 pb-12 overflow-hidden">
+      <section id="contact-container" className="relative pt-0 pb-12 overflow-hidden">
         <ContactSection />
       </section>
     </div>
