@@ -1,11 +1,14 @@
 "use client"
 
-import { ContactSection } from "@/components/contact-section"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function ContactPage() {
-  return (
-    <div className="pt-24">
-      <ContactSection />
-    </div>
-  )
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace("/#contact")
+  }, [router])
+
+  return null
 }

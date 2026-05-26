@@ -9,7 +9,6 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function PrinciplesSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
   const principlesRef = useRef<HTMLDivElement>(null)
 
   const principles = [
@@ -70,22 +69,9 @@ export function PrinciplesSection() {
   ]
 
   useEffect(() => {
-    if (!sectionRef.current || !headerRef.current || !principlesRef.current) return
+    if (!sectionRef.current || !principlesRef.current) return
 
     const ctx = gsap.context(() => {
-      // Header slide in
-      gsap.from(headerRef.current, {
-        x: -60,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      })
-
       // Each principle slides in from its aligned side
       const articles = principlesRef.current?.querySelectorAll("article")
       articles?.forEach((article, index) => {
@@ -108,13 +94,7 @@ export function PrinciplesSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="principles" className="relative py-32 px-6 md:px-12 max-w-7xl mx-auto">
-      {/* Section header */}
-      <div ref={headerRef} className="mb-24">
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">03 / Expertise</span>
-        <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight uppercase">OUR CORE DOMAINS</h2>
-      </div>
-
+    <section ref={sectionRef} id="principles" className="relative pt-0 pb-16 px-6 md:px-12 max-w-7xl mx-auto">
       {/* Staggered principles */}
       <div ref={principlesRef} className="space-y-24 md:space-y-32">
         {principles.map((principle, index) => (

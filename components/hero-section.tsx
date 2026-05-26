@@ -16,6 +16,20 @@ export function HeroSection() {
   const contentRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
 
+  const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
+    e.preventDefault()
+    // @ts-expect-error - lenis on window
+    if (typeof window !== "undefined" && window.lenis) {
+      // @ts-expect-error - lenis on window
+      window.lenis.scrollTo(target, { duration: 1.5 })
+    } else {
+      const element = document.querySelector(target)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      }
+    }
+  }
+
   useEffect(() => {
     if (!sectionRef.current || !contentRef.current) return
 
@@ -113,7 +127,8 @@ export function HeroSection() {
 
         <div className="mt-12 flex items-center gap-8">
           <Link
-            href="/solutions"
+            href="#solutions"
+            onClick={(e) => handleScroll(e, "#solutions")}
             className="group relative overflow-hidden inline-flex items-center gap-3 bg-foreground text-background px-8 py-4 font-mono text-xs uppercase tracking-widest hover:shadow-[0_0_30px_rgba(var(--accent-rgb),0.3)] transition-all duration-300"
           >
             <div className="absolute inset-0 bg-accent translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]" />
@@ -121,13 +136,6 @@ export function HeroSection() {
               <ScrambleTextOnHover text="View Experiments" as="span" duration={0.6} />
               <BitmapChevron className="transition-transform duration-[400ms] ease-in-out group-hover:rotate-45" />
             </span>
-          </Link>
-          <Link
-            href="/capabilities"
-            className="group font-mono text-xs uppercase tracking-widest text-muted-foreground hover:text-accent transition-colors duration-300 flex items-center gap-2"
-          >
-            Latest Signals
-            <div className="w-0 h-[1px] bg-accent transition-all duration-300 group-hover:w-4" />
           </Link>
         </div>
       </div>

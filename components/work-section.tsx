@@ -114,7 +114,7 @@ export function WorkSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="work" className="relative py-32 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden">
+    <section ref={sectionRef} id="work" className="relative pt-6 pb-16 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden">
       {/* Global Section Background Parallax */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden rounded-3xl border border-border/5">
         <img 
@@ -129,7 +129,7 @@ export function WorkSection() {
         {/* Section header */}
       <div ref={headerRef} className="mb-16 flex items-end justify-between">
         <div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">02 / Solutions</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">03 / Solutions</span>
           <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight">SPECIALIZED SERVICES</h2>
         </div>
         <p className="hidden md:block max-w-xs font-mono text-xs text-muted-foreground text-right leading-relaxed">

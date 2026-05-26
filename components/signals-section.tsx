@@ -135,8 +135,7 @@ export function SignalsSection() {
 
       {/* Section header */}
       <div ref={headerRef} className="mb-20">
-        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">01 / Capabilities</span>
-        <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight uppercase">OUR SERVICES</h2>
+        <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">01 / Capabilities — Enterprise Capabilities & Services</span>
       </div>
 
       {/* Grid container - responsive */}

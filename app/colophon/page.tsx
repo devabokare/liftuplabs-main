@@ -1,5 +1,14 @@
-import { ColophonSection } from "@/components/colophon-section"
+"use client"
+
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function ColophonPage() {
-  return <ColophonSection />
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace("/#colophon")
+  }, [router])
+
+  return null
 }

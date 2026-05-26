@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useEffect, useState, useRef, useCallback, ElementType } from "react"
 import gsap from "gsap"
 
 interface ScrambleTextProps {
@@ -18,7 +18,7 @@ interface ScrambleTextOnHoverProps {
   /** Duration of the scramble animation in seconds */
   duration?: number
   /** Element type to render */
-  as?: "span" | "button" | "div"
+  as?: ElementType
   /** onClick handler for buttons */
   onClick?: () => void
 }

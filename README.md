@@ -11,6 +11,7 @@ LiftUpLabs is designed as a high-fidelity digital presence. It is a comprehensiv
 - **Dark Mode Support:** A sleek and consistent design system using Tailwind CSS variables.
 - **Accessible & Responsive:** Built on top of Radix UI to ensure accessibility (a11y) out of the box, optimized for mobile and desktop screens.
 - **Robust Forms:** Form handling and validation for the contact page using `react-hook-form` and `zod`.
+- **Dynamic Profile Sharing & Deep Linking:** Added share options to the Team and Advisory Board profile modals. Using query parameters (`?member=Name`), users can copy deep links directly to a team member's card, triggering smooth auto-scroll and opening the modal upon page load. Support for both Web Share API and automatic clipboard copy fallback with animated success feedback.
 
 ## 🛠️ Technology Stack
 

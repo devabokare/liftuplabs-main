@@ -106,17 +106,58 @@ const ADVISORY_BOARD = [
 export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
-  const [selectedMember, setSelectedMember] = useState<typeof TEAM_MEMBERS[0] | null>(null)
+  const [selectedMember, setSelectedMember] = useState<(typeof TEAM_MEMBERS[0] | typeof ADVISORY_BOARD[0]) & { instagram?: string; portfolio?: string } | null>(null)
+  const [shareStatus, setShareStatus] = useState<string>("")
 
   useEffect(() => {
+    // Check if there is a member parameter in query string on mount
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const memberName = params.get("member");
+      if (memberName) {
+        const decodedName = decodeURIComponent(memberName).toLowerCase();
+        const found = TEAM_MEMBERS.find(m => m.name.toLowerCase() === decodedName) || 
+                      ADVISORY_BOARD.find(m => m.name.toLowerCase() === decodedName);
+        if (found) {
+          setSelectedMember(found);
+          // Scroll to the about section
+          setTimeout(() => {
+            const el = document.getElementById("about");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 500);
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    setShareStatus("")
     if (selectedMember) {
       document.body.style.overflow = "hidden"
       // @ts-expect-error - lenis exposed to window
       if (typeof window !== "undefined" && window.lenis) window.lenis.stop()
+      
+      // Update URL with selected member
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        url.searchParams.set("member", selectedMember.name);
+        window.history.replaceState({}, "", url.toString());
+      }
     } else {
       document.body.style.overflow = ""
       // @ts-expect-error - lenis exposed to window
       if (typeof window !== "undefined" && window.lenis) window.lenis.start()
+      
+      // Remove member from URL if closed
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("member")) {
+          url.searchParams.delete("member");
+          window.history.replaceState({}, "", url.toString());
+        }
+      }
     }
     return () => {
       document.body.style.overflow = ""
@@ -125,96 +166,78 @@ export function AboutSection() {
     }
   }, [selectedMember])
 
+  const handleShareProfile = () => {
+    if (!selectedMember) return;
+    
+    const shareUrl = `${window.location.origin}${window.location.pathname}?member=${encodeURIComponent(selectedMember.name)}#about`;
+    
+    const fallbackCopy = (text: string) => {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.width = "2em";
+      textArea.style.height = "2em";
+      textArea.style.padding = "0";
+      textArea.style.border = "none";
+      textArea.style.outline = "none";
+      textArea.style.boxShadow = "none";
+      textArea.style.background = "transparent";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        const successful = document.execCommand("copy");
+        if (successful) {
+          setShareStatus("Copied!");
+        } else {
+          setShareStatus("Failed to copy");
+        }
+      } catch (err) {
+        setShareStatus("Failed to copy");
+      }
+      document.body.removeChild(textArea);
+      setTimeout(() => setShareStatus(""), 2000);
+    };
+
+    if (navigator.share) {
+      navigator.share({
+        title: `${selectedMember.name} - ${selectedMember.role}`,
+        text: `Check out ${selectedMember.name}'s professional profile at LiftUpLabs!`,
+        url: shareUrl,
+      })
+      .then(() => {
+        setShareStatus("Shared!");
+        setTimeout(() => setShareStatus(""), 2000);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          fallbackCopy(shareUrl);
+        }
+      });
+    } else {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl)
+          .then(() => {
+            setShareStatus("Copied!");
+            setTimeout(() => setShareStatus(""), 2000);
+          })
+          .catch(() => {
+            fallbackCopy(shareUrl);
+          });
+      } else {
+        fallbackCopy(shareUrl);
+      }
+    }
+  };
+
   useEffect(() => {
-    if (!sectionRef.current || !headerRef.current) return
-
-    const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, {
-        x: -100,
-        opacity: 0,
-        scale: 0.95,
-        duration: 1.5,
-        ease: "expo.out",
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      })
-
-      const sections = gsap.utils.toArray(".animate-block") as HTMLElement[]
-      sections.forEach((sec) => {
-        gsap.from(sec, {
-          y: 80,
-          opacity: 0,
-          scale: 0.98,
-          duration: 1.2,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: sec,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        })
-      })
-
-      const teamCards = gsap.utils.toArray(".team-card") as HTMLElement[]
-      if (teamCards.length) {
-        gsap.from(teamCards, {
-          y: 60,
-          opacity: 0,
-          scale: 0.9,
-          duration: 1,
-          stagger: 0.15,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: ".team-grid",
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        })
-      }
-
-      const advisoryCards = gsap.utils.toArray(".advisory-card") as HTMLElement[]
-      if (advisoryCards.length) {
-        gsap.from(advisoryCards, {
-          y: 60,
-          opacity: 0,
-          scale: 0.9,
-          duration: 1,
-          stagger: 0.15,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: ".advisory-grid",
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        })
-      }
-
-      const parallaxImgs = gsap.utils.toArray(".parallax-img") as HTMLElement[]
-      parallaxImgs.forEach((img) => {
-        gsap.fromTo(img,
-          { yPercent: -15, scale: 1.1 },
-          {
-            yPercent: 15,
-            ease: "none",
-            scrollTrigger: {
-              trigger: img.parentElement,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            }
-          }
-        )
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
+    // Entrance animations removed as requested to keep the section static.
   }, [])
 
   return (
-    <section ref={sectionRef} id="about" className="relative py-32 px-6 md:px-12 max-w-7xl mx-auto">
+    <section ref={sectionRef} id="about" className="relative pt-6 pb-32 px-6 md:px-12 max-w-7xl mx-auto">
       <div ref={headerRef} className="mb-24">
         <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">05 / About</span>
         <h2 className="mt-4 font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight uppercase">OUR MISSION</h2>
@@ -254,17 +277,17 @@ export function AboutSection() {
       </div>
 
       <div className="mt-20 animate-block">
-        <ScrambleTextOnHover 
-          as="h3" 
-          text="CORE DOMAINS OF EXPERTISE" 
-          className="font-[var(--font-bebas)] text-4xl md:text-5xl tracking-tight mb-12 cursor-default" 
+        <ScrambleTextOnHover
+          as="h3"
+          text="CORE DOMAINS OF EXPERTISE"
+          className="font-[var(--font-bebas)] text-4xl md:text-5xl tracking-tight mb-12 cursor-default"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
-            <ScrambleTextOnHover 
-              as="h4" 
-              text="ERP Solutions" 
-              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            <ScrambleTextOnHover
+              as="h4"
+              text="ERP Solutions"
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default"
             />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Odoo ERP implementation & customization</li>
@@ -274,10 +297,10 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <ScrambleTextOnHover 
-              as="h4" 
-              text="Cloud Solutions" 
-              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            <ScrambleTextOnHover
+              as="h4"
+              text="Cloud Solutions"
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default"
             />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Cloud-native applications</li>
@@ -287,10 +310,10 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <ScrambleTextOnHover 
-              as="h4" 
-              text="Education Technology (EdTech)" 
-              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            <ScrambleTextOnHover
+              as="h4"
+              text="Education Technology (EdTech)"
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default"
             />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Educational ERP Systems</li>
@@ -301,10 +324,10 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <ScrambleTextOnHover 
-              as="h4" 
-              text="Research & Development (R&D)" 
-              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            <ScrambleTextOnHover
+              as="h4"
+              text="Research & Development (R&D)"
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default"
             />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Custom software research</li>
@@ -314,10 +337,10 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <ScrambleTextOnHover 
-              as="h4" 
-              text="Product Engineering" 
-              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            <ScrambleTextOnHover
+              as="h4"
+              text="Product Engineering"
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default"
             />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> End-to-end product development</li>
@@ -327,10 +350,10 @@ export function AboutSection() {
             </ul>
           </div>
           <div>
-            <ScrambleTextOnHover 
-              as="h4" 
-              text="Workflow Automation" 
-              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default" 
+            <ScrambleTextOnHover
+              as="h4"
+              text="Workflow Automation"
+              className="font-mono text-sm font-semibold text-accent mb-4 uppercase tracking-widest cursor-default"
             />
             <ul className="space-y-3 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
               <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Administrative process automation</li>
@@ -344,10 +367,10 @@ export function AboutSection() {
 
       <div className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-12 border-t border-border/20 pt-16 animate-block">
         <div>
-          <ScrambleTextOnHover 
-            as="h3" 
-            text="SPECIALIZED SERVICES" 
-            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default" 
+          <ScrambleTextOnHover
+            as="h3"
+            text="SPECIALIZED SERVICES"
+            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default"
           />
           <ul className="space-y-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Custom Software Development</li>
@@ -359,10 +382,10 @@ export function AboutSection() {
           </ul>
         </div>
         <div>
-          <ScrambleTextOnHover 
-            as="h3" 
-            text="INDUSTRY FOCUS" 
-            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default" 
+          <ScrambleTextOnHover
+            as="h3"
+            text="INDUSTRY FOCUS"
+            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default"
           />
           <ul className="space-y-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> Schools and Colleges</li>
@@ -373,10 +396,10 @@ export function AboutSection() {
           </ul>
         </div>
         <div>
-          <ScrambleTextOnHover 
-            as="h3" 
-            text="TECHNOLOGY STRENGTHS" 
-            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default" 
+          <ScrambleTextOnHover
+            as="h3"
+            text="TECHNOLOGY STRENGTHS"
+            className="font-[var(--font-bebas)] text-3xl tracking-tight mb-8 cursor-default"
           />
           <ul className="space-y-4 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground/80">
             <li className="flex items-center gap-3"><span className="w-1.5 h-1.5 bg-accent rounded-full" /> SaaS Development</li>
@@ -389,69 +412,81 @@ export function AboutSection() {
       </div>
 
       <div className="mt-32">
-        <ScrambleTextOnHover 
-          as="h2" 
-          text="THE TEAM" 
-          className="font-[var(--font-bebas)] text-4xl md:text-6xl tracking-tight mb-12 animate-block cursor-default" 
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 team-grid">
+        <div className="flex items-center gap-4 mb-12">
+          <span className="w-12 h-[2px] bg-accent inline-block"></span>
+          <ScrambleTextOnHover
+            as="h2"
+            text="THE TEAM"
+            className="font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight cursor-default"
+          />
+        </div>
+        <div className="flex flex-wrap justify-center gap-8 team-grid">
           {TEAM_MEMBERS.map((member, i) => (
             <button
               key={i}
               onClick={() => setSelectedMember(member)}
-              className="group border-l border-border/20 pl-6 py-4 hover:border-accent transition-colors duration-500 block w-full text-left bg-transparent border-t-0 border-r-0 border-b-0 team-card"
+              className="group relative bg-secondary/5 border border-border/10 hover:border-accent/40 backdrop-blur-sm p-8 rounded-2xl hover:bg-secondary/10 transition-all duration-500 block text-left team-card shadow-lg hover:shadow-accent/5 w-full sm:w-[calc((100%-32px)/2)] lg:w-[calc((100%-64px)/3)]"
             >
-              <div className="w-16 h-16 rounded-full overflow-hidden mb-6 border border-border/20 group-hover:border-accent/50 transition-colors">
+              <div className="w-24 h-24 rounded-full overflow-hidden mb-6 border-2 border-border/25 group-hover:border-accent transition-all duration-500 shadow-md">
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover transition-all duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <span className="font-mono text-[8px] uppercase tracking-widest text-accent mb-2 block">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent mb-3 block">
                 {member.expertise}
               </span>
-              <h4 className="font-[var(--font-bebas)] text-2xl tracking-tight mb-1 group-hover:text-accent transition-colors flex items-center gap-2">
+              <h4 className="font-[var(--font-bebas)] text-3xl md:text-4xl tracking-wide mb-1 group-hover:text-accent transition-colors flex items-center gap-2 uppercase">
                 {member.name}
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity -rotate-45">→</span>
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity -rotate-45 text-xl">→</span>
               </h4>
-              <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
+              <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4 border-b border-border/10 pb-4">
                 {member.role}
+              </p>
+              <p className="font-sans text-xs text-foreground/75 leading-relaxed font-light normal-case tracking-normal line-clamp-2">
+                {member.bio}
               </p>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="mt-24">
-        <ScrambleTextOnHover 
-          as="h2" 
-          text="ADVISORY BOARD" 
-          className="font-[var(--font-bebas)] text-4xl md:text-6xl tracking-tight mb-12 animate-block cursor-default" 
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-12 advisory-grid">
+      <div className="mt-32">
+        <div className="flex items-center gap-4 mb-12">
+          <span className="w-12 h-[2px] bg-accent inline-block"></span>
+          <ScrambleTextOnHover
+            as="h2"
+            text="ADVISORY BOARD"
+            className="font-[var(--font-bebas)] text-5xl md:text-7xl tracking-tight cursor-default"
+          />
+        </div>
+        <div className="flex flex-wrap justify-center gap-8 advisory-grid">
           {ADVISORY_BOARD.map((member, i) => (
             <button
               key={i}
               onClick={() => setSelectedMember(member)}
-              className="group border-l border-border/20 pl-6 py-4 hover:border-accent transition-colors duration-500 block w-full text-left bg-transparent border-t-0 border-r-0 border-b-0 advisory-card"
+              className="group relative bg-secondary/5 border border-border/10 hover:border-accent/40 backdrop-blur-sm p-8 rounded-2xl hover:bg-secondary/10 transition-all duration-500 block text-left advisory-card shadow-lg hover:shadow-accent/5 w-full sm:w-[calc((100%-32px)/2)]"
             >
-              <div className="w-16 h-16 rounded-full overflow-hidden mb-6 border border-border/20 group-hover:border-accent/50 transition-colors">
+              <div className="w-24 h-24 rounded-full overflow-hidden mb-6 border-2 border-border/25 group-hover:border-accent transition-all duration-500 shadow-md">
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover transition-all duration-500"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
-              <span className="font-mono text-[8px] uppercase tracking-widest text-accent mb-2 block">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent mb-3 block">
                 {member.expertise}
               </span>
-              <h4 className="font-[var(--font-bebas)] text-2xl tracking-tight mb-1 group-hover:text-accent transition-colors flex items-center gap-2">
+              <h4 className="font-[var(--font-bebas)] text-3xl md:text-4xl tracking-wide mb-1 group-hover:text-accent transition-colors flex items-center gap-2 uppercase">
                 {member.name}
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity -rotate-45">→</span>
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity -rotate-45 text-xl">→</span>
               </h4>
-              <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
+              <p className="font-mono text-xs text-muted-foreground uppercase tracking-widest mb-4 border-b border-border/10 pb-4">
                 {member.role}
+              </p>
+              <p className="font-sans text-xs text-foreground/75 leading-relaxed font-light normal-case tracking-normal line-clamp-2">
+                {member.bio}
               </p>
             </button>
           ))}
@@ -480,27 +515,9 @@ export function AboutSection() {
           </div>
         </div>*/}
 
-      <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-border/20 pt-12 animate-block">
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] text-accent mb-4">Focus</h4>
-          <p className="font-mono text-[10px] text-foreground/70 uppercase tracking-widest">Digital Solutions</p>
-        </div>
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] text-accent mb-4">Core</h4>
-          <p className="font-mono text-[10px] text-foreground/70 uppercase tracking-widest">AI Automation</p>
-        </div>
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] text-accent mb-4">Visual</h4>
-          <p className="font-mono text-[10px] text-foreground/70 uppercase tracking-widest">3D Interaction</p>
-        </div>
-        <div>
-          <h4 className="font-mono text-[9px] uppercase tracking-[0.3em] text-accent mb-4">Scale</h4>
-          <p className="font-mono text-[10px] text-foreground/70 uppercase tracking-widest">Cloud Systems</p>
-        </div>
-      </div>
 
       {selectedMember && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-start md:items-center justify-center p-4 md:p-6 opacity-100 transition-opacity overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) setSelectedMember(null)
@@ -564,6 +581,17 @@ export function AboutSection() {
                       Instagram
                     </a>
                   )}
+                  <button
+                    onClick={handleShareProfile}
+                    className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors text-sm font-medium cursor-pointer"
+                  >
+                    {shareStatus === "Copied!" || shareStatus === "Shared!" ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-500"><polyline points="20 6 9 17 4 12" /></svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
+                    )}
+                    {shareStatus || "Share Profile"}
+                  </button>
                 </div>
                 <button onClick={() => setSelectedMember(null)} className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors md:ml-auto">
                   Close Details

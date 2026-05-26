@@ -276,46 +276,21 @@ export function ContactSection() {
             </div>
           </div>
 
-          {/* Abstract Map Link */}
-          <a
-            href="https://maps.app.goo.gl/p25xmvsuhfddEbrW7"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative block group mt-10 overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent z-10" />
-            <div className="absolute inset-0 bg-accent/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10" />
-
-            <div className="relative aspect-[4/3] md:aspect-[16/9] lg:aspect-square overflow-hidden border border-border/30">
-              <img
-                src="/lab_map_abstract.png"
-                alt="Lab Location Map"
-                className="w-full h-full object-cover grayscale opacity-70 group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-[cubic-bezier(0.19,1,0.22,1)]"
-              />
-
-              {/* Radar ping effect */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 z-20">
-                <span className="absolute inset-0 bg-accent rounded-full animate-ping opacity-60 duration-1000" />
-                <span className="relative block w-3 h-3 bg-accent rounded-full border border-background shadow-[0_0_15px_rgba(var(--color-accent),0.8)]" />
-              </div>
-
-              {/* Corner accents */}
-              <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-accent/50 z-20 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
-              <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-accent/50 z-20 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
-              <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-accent/50 z-20 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-accent/50 z-20 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
-            </div>
-
-            {/* Hover reveal button */}
-            <div className="absolute bottom-6 left-6 right-6 z-30 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-              <div className="bg-background/90 backdrop-blur-md px-4 py-3 border border-border flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-foreground">
-                  Launch Navigation
-                </span>
-                <ArrowRight size={14} className="text-accent -rotate-45" />
-              </div>
-            </div>
-          </a>
+          {/* Interactive Map Embed */}
+          <div className="relative aspect-[4/3] md:aspect-[16/9] lg:aspect-square overflow-hidden border border-border/30 w-full mt-6 lg:mt-10 group">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7567.204471992214!2d73.958942!3d18.501668!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c30018a08c47%3A0xcb30f568111e3d58!2sAdroit%20Engineering!5e0!3m2!1sen!2sin!4v1779268404106!5m2!1sen!2sin"
+              className="w-full h-full border-0 grayscale invert-[0.9] opacity-70 hover:opacity-100 hover:invert-0 hover:grayscale-0 transition-all duration-700 ease-in-out"
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-accent/50 pointer-events-none z-10 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
+            <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-accent/50 pointer-events-none z-10 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
+            <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-accent/50 pointer-events-none z-10 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
+            <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-accent/50 pointer-events-none z-10 transition-all duration-500 group-hover:w-12 group-hover:h-12" />
+          </div>
 
           {/* Socials - redesigned */}
           <div className="pt-10">

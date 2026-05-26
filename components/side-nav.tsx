@@ -1,33 +1,85 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Menu, X } from "lucide-react"
 
 const navItems = [
-  { href: "/", label: "Index" },
-  { href: "/solutions", label: "Capabilities & Solutions" },
-  { href: "/principles", label: "Principles" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "#hero", label: "Index" },
+  { href: "#capabilities", label: "Capabilities" },
+  { href: "#principles", label: "Principles" },
+  { href: "#solutions", label: "Solutions" },
+  { href: "#about", label: "About" },
+  { href: "#contact", label: "Contact" },
 ]
 
 export function SideNav() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState("hero")
+
+  useEffect(() => {
+    const sections = ["hero", "capabilities", "principles", "solutions", "about", "contact"]
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id)
+          }
+        },
+        { threshold: 0.2, rootMargin: "-10% 0px -50% 0px" }
+      )
+      observer.observe(el)
+      return { observer, el }
+    })
+
+    return () => {
+      observers.forEach((obs) => {
+        if (obs) obs.observer.unobserve(obs.el)
+      })
+    }
+  }, [])
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    setIsOpen(false)
+    
+    const targetId = href.startsWith("#") ? href : href.substring(1)
+    const cleanId = targetId.startsWith("#") ? targetId : `#${targetId}`
+    
+    // @ts-expect-error - lenis is on window
+    if (typeof window !== "undefined" && window.lenis) {
+      // @ts-expect-error - lenis is on window
+      window.lenis.scrollTo(cleanId, { duration: 1.5 })
+    } else {
+      const element = document.querySelector(cleanId)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" })
+      }
+    }
+  }
 
   return (
     <>
-      {/* Floating Menu Toggle */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed top-8 left-8 z-[60] group flex items-center gap-3 bg-background/80 backdrop-blur-md border border-border/20 px-4 py-2 hover:border-accent transition-all duration-300"
-      >
-        <Menu size={16} className="text-accent group-hover:scale-110 transition-transform" />
-        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground group-hover:text-foreground">Menu</span>
-      </button>
+      {/* Floating Menu Toggle & Logo */}
+      <div className="fixed top-8 left-8 z-[60] flex items-center gap-3">
+        <Link
+          href="#hero"
+          onClick={(e) => handleNavClick(e, "#hero")}
+          className="flex items-center bg-background/80 backdrop-blur-md border border-border/20 px-4 py-2 hover:border-accent transition-all duration-300 h-[38px]"
+        >
+          <img
+            src="/liftuplabs logo.png"
+            alt="LIFTUPLABS"
+            className="h-5 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity"
+          />
+        </Link>
+      </div>
 
       {/* Backdrop */}
       <div
@@ -55,13 +107,13 @@ export function SideNav() {
 
         {/* Logo Section */}
         <div className="p-8 mt-4">
-          <Link href="/" onClick={() => setIsOpen(false)} className="group block">
+          <Link href="#hero" onClick={(e) => handleNavClick(e, "#hero")} className="group block">
             <div className="flex items-center">
               <div className="w-40 h-12 overflow-hidden shrink-0">
                 <img
-                  src="/liftuplabs.png"
+                  src="/liftuplabs logo.png"
                   alt="LIFTUPLABS"
-                  className="w-full h-full object-contain object-left brightness-0 invert opacity-80 group-hover:opacity-100 transition-opacity"
+                  className="w-full h-full object-contain object-left opacity-80 group-hover:opacity-100 transition-opacity"
                 />
               </div>
             </div>
@@ -71,12 +123,12 @@ export function SideNav() {
         {/* Navigation Links */}
         <div className="flex-1 px-4 py-8 flex flex-col gap-2">
           {navItems.map(({ href, label }) => {
-            const isActive = pathname === href
+            const isActive = activeSection === href.replace("#", "")
             return (
               <Link
                 key={href}
                 href={href}
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleNavClick(e, href)}
                 className={cn(
                   "flex items-center gap-4 px-4 py-4 group transition-all duration-300 rounded-sm",
                   isActive ? "bg-accent/10" : "hover:bg-foreground/5"
@@ -104,8 +156,8 @@ export function SideNav() {
         {/* Footer Section */}
         <div className="absolute bottom-0 left-0 right-0 p-8 border-t border-border/5">
           <Link
-            href="/contact"
-            onClick={() => setIsOpen(false)}
+            href="#contact"
+            onClick={(e) => handleNavClick(e, "#contact")}
             className="block w-full border border-foreground/10 px-4 py-3 font-mono text-[10px] uppercase tracking-widest text-center text-muted-foreground hover:border-accent hover:text-accent transition-all duration-200"
           >
             Get In Touch
