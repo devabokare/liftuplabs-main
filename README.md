@@ -28,6 +28,35 @@ LiftUpLabs is designed as a high-fidelity digital presence. It is a comprehensiv
 
 The project follows a standard Next.js App Router structure, with a custom UI components folder architecture.
 
+```text
+liftuplabs-main/
+├── app/                  # Next.js App Router routing & pages
+│   ├── about/            # About page
+│   ├── colophon/         # Colophon page
+│   ├── contact/          # Contact page with validation
+│   ├── principles/       # Core principles details page
+│   ├── solutions/        # Enterprise solutions & services
+│   ├── globals.css       # Global stylesheet (alternative)
+│   ├── layout.tsx        # Root layout configuration
+│   └── page.tsx          # Homepage showing all key sections
+├── components/           # Custom React/TSX components
+│   ├── ui/               # Reusable primitives (modals, inputs, buttons, etc.)
+│   ├── about-section.tsx # About section with Team/Advisory modal & dynamic share
+│   ├── scramble-text.tsx # Interactive text animations on mount/hover
+│   ├── side-nav.tsx      # Sidebar navigation panel
+│   └── ...               # Various custom interactive page elements
+├── hooks/                # Custom React hooks (use-mobile, use-toast, etc.)
+├── lib/                  # Helper utilities (cn utility, constants)
+├── public/               # Static assets (images, logos, fonts, SVGs)
+│   ├── team/             # Team member avatar photos
+│   └── solutions/        # Solutions graphics/illustrations
+├── styles/               # Styling configuration & global CSS
+│   └── globals.css       # Root design tokens & variables
+├── package.json          # Dependency and script manager
+├── tailwind.config.ts    # Tailwind styling config
+└── tsconfig.json         # TypeScript compiler configurations
+```
+
 ### `/app` Directory (Routing)
 The core routing and pages for the application:
 - **`app/page.tsx`**: The main landing/home page, showcasing our hero section and general overview.
